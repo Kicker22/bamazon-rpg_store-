@@ -8,7 +8,7 @@ var inquirer = require("inquirer");
 var userItem;
 var userQuantity;
 var stockQuantity;
-var dbQuantity;
+var dbQuantity; 
 
 
 
@@ -78,22 +78,14 @@ function querryItems() {
 function mathThatIsh (){
     connection.query("SELECT stock_quantity FROM products WHERE item_id =" + userItem ,function(err,res){
             dbQuantity = res
+
             for(i = 0; i < dbQuantity.length; i++){
                 console.log(stockQuantity = dbQuantity[i].stock_quantity - userQuantity);
+                connection.query("UPDATE products SET stock_quantity = "+( dbQuantity[i].stock_quantity - userQuantity )+" WHERE item_id =" + userItem)
             }
         
 
     })
-    connection.query("UPDATE products SET ? WHERE ?")(
-        [
-            {
-                stock_quantity:dbQuantity
-            },
-            {
-                item_id: userItem
-            }
-        ]
-    )
 
 };
 
