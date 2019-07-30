@@ -106,10 +106,10 @@ function mathThatIsh() {
                 console.log("Insufficient quantity!")
                 console.log("______________________________")
             }else{
-
                 getTotalCost()
-                
                 connection.query("UPDATE products SET stock_quantity = " + (dbQuantity[i].stock_quantity - userQuantity) + " WHERE item_id =" + userItem)
+
+                
             }
         }
         connection.end();
