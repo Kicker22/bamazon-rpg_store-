@@ -5,10 +5,10 @@ var inquirer = require("inquirer");
 
 
 // global variables for storing item id and quantity for later checks
-var dbItem;
-var dbQuantity;
 var userItem;
 var userQuantity;
+var stockQuantity;
+var dbQuantity;
 
 
 
@@ -43,7 +43,7 @@ function querryItems() {
                     name: "id"
                 },
                 {
-                    type:"input",
+                    type: "number",
                     message: "how many would you like to purchase",
                     name: 'quantity'
                 },
@@ -56,20 +56,54 @@ function querryItems() {
             ])
 
             .then(function (inquirerResponse) {
+
+
                 if (inquirerResponse.confirm) {
-                    item = inquirerResponse.id
-                    quantity = inquirerResponse.quantity
-                    console.log("\n you've chosen item number " + inquirerResponse.id);
-                    console.log(" Chosen quantity " + inquirerResponse.quantity);
+                    userItem = inquirerResponse.id
+                    userQuantity = inquirerResponse.quantity
+                    mathThatIsh()
+                    console.log(userQuantity)
+                    console.log(userItem)
+                    console.log("\n you've chosen item number " + userItem);
+                    console.log(" Chosen quantity " + userQuantity);
+                } else {
+                    console.log("tansaction aborted")
                 }
-                connection.query("SELECT * FROM products")
-
-
 
 
             })
     })
 }
+
+function mathThatIsh (){
+    connection.query("SELECT stock_quantity FROM products WHERE item_id =" + userItem ,function(err,res){
+            dbQuantity = res
+            for(i = 0; i < dbQuantity.length; i++){
+                console.log(stockQuantity = dbQuantity[i].stock_quantity - userQuantity);
+            }
+        
+
+    })
+    connection.query("UPDATE products SET ? WHERE ?")(
+        [
+            {
+                stock_quantity:dbQuantity
+            },
+            {
+                item_id: userItem
+            }
+        ]
+    )
+
+};
+
+
+
+
+
+
+
+
 
 
 
