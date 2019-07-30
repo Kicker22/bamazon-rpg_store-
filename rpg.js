@@ -8,6 +8,7 @@ var inquirer = require("inquirer");
 var userItem;
 var userQuantity;
 var dbQuantity;
+var totalCost;
 
 
 
@@ -34,7 +35,8 @@ function querryItems() {
 
         // this for loop will display all of the items in the shop 
         for (var i = 0; i < res.length; i++) {
-            console.log(res[i].item_id + " | " + res[i].product_name + " | " + res[i].department_name + " | $" + res[i].price + " | " + res[i].stock_quantity + " remaining");
+            console.log(res[i].item_id + " | " + res[i].product_name + " | $" + res[i].price + " | " + res[i].stock_quantity + " remaining");
+            console.log("---------------------------------")
         }
         console.log("-----------------------------------");
 
@@ -59,12 +61,15 @@ function querryItems() {
                 }
             ])
 
+            // This .then function grabs the user input from the inquirer prompts
             .then(function (inquirerResponse) {
 
 
                 if (inquirerResponse.confirm) {
                     userItem = inquirerResponse.id
                     userQuantity = inquirerResponse.quantity
+                    
+                    //this function will handle all of the math and updating database values
                     mathThatIsh()
 
                     console.log("\n you've chosen item number " + userItem);
@@ -79,23 +84,51 @@ function querryItems() {
     })
 }
 
+
+//this function will take the inquirer inputs and query that specific item in the sql database
+// then this function will pull the stock_quantity of that queried item
+// and then subtract the customer order from that items stock_quantity
+// then it will return the updated number back to the database  
 function mathThatIsh() {
     connection.query("SELECT stock_quantity FROM products WHERE item_id =" + userItem, function (err, res) {
+        
+        //this variable is global 
         dbQuantity = res
 
+        // when the item is queried above, ite returns it in an array object 
+        // this for loop pulls the stock_quantity from that object so it can be used
         for (i = 0; i < dbQuantity.length; i++) {
+            // this if statment compares the database quantity against the customer request
+            // if the customer request is > than the database quantity it will return Insufficient quantity... and then end the connection 
+            // without changing any data
             if(dbQuantity[i].stock_quantity < userQuantity){
+
                 console.log("Insufficient quantity!")
                 console.log("______________________________")
             }else{
-                console.log(" Your order has been placed")
-                console.log("--------------------------------------------------------")
+
+                getTotalCost()
+                
                 connection.query("UPDATE products SET stock_quantity = " + (dbQuantity[i].stock_quantity - userQuantity) + " WHERE item_id =" + userItem)
             }
         }
         connection.end();
     })
 };
+               
+
+function getTotalCost() {
+    connection.query("SELECT price FROM products WHERE item_id =" + userItem, function (err, res) {
+    var price = res;
+    for(x = 0; x < price.length; x++){
+        console.log(" total cost: $"+price[x].price * userQuantity)
+        console.log(" Your order has been placed")
+        console.log("--------------------------------------------------------")
+    }
+    })
+    
+}
+
 
 
 
