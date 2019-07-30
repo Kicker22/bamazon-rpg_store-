@@ -62,10 +62,11 @@ function querryItems() {
                     userItem = inquirerResponse.id
                     userQuantity = inquirerResponse.quantity
                     mathThatIsh()
-                    console.log(userQuantity)
-                    console.log(userItem)
+
                     console.log("\n you've chosen item number " + userItem);
                     console.log(" Chosen quantity " + userQuantity);
+                    console.log(" Your order has been placed")
+                    console.log("--------------------------------------------------------")
                 } else {
                     console.log("tansaction aborted")
                 }
@@ -80,9 +81,10 @@ function mathThatIsh (){
             dbQuantity = res
 
             for(i = 0; i < dbQuantity.length; i++){
-                console.log(stockQuantity = dbQuantity[i].stock_quantity - userQuantity);
                 connection.query("UPDATE products SET stock_quantity = "+( dbQuantity[i].stock_quantity - userQuantity )+" WHERE item_id =" + userItem)
+             
             }
+        connection.end();
         
 
     })
