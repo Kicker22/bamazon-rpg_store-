@@ -121,7 +121,8 @@ function getTotalCost() {
     connection.query("SELECT price FROM products WHERE item_id =" + userItem, function (err, res) {
     var price = res;
     for(x = 0; x < price.length; x++){
-        console.log(" total cost: $"+price[x].price * userQuantity)
+        var convert = (price[x].price * userQuantity).toFixed(2)
+        console.log(" total cost: $"+ convert)
         console.log(" Your order has been placed")
         console.log("--------------------------------------------------------")
     }

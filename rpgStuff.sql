@@ -14,7 +14,7 @@ CREATE TABLE products(
 
 
 INSERT INTO products(product_name,department_name,price,stock_quantity)
- VALUES("Great Sword","Weapons",25.5,10);
+ VALUES("Great Sword","Weapons",.99,10);
 
 INSERT INTO products(product_name,department_name,price,stock_quantity)
  VALUES("Longbow","Weapons",10.0,10);
