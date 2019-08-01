@@ -70,7 +70,7 @@ function querryItems() {
                     userQuantity = inquirerResponse.quantity
                     
                     //this function will handle all of the math and updating database values
-                    mathThatIsh()
+                    grabSelectedItem()
 
                     console.log("\n you've chosen item number " + userItem);
                     console.log(" Chosen quantity " + userQuantity);
@@ -89,7 +89,7 @@ function querryItems() {
 // then this function will pull the stock_quantity of that queried item
 // and then subtract the customer order from that items stock_quantity
 // then it will return the updated number back to the database  
-function mathThatIsh() {
+function grabSelectedItem() {
     connection.query("SELECT stock_quantity FROM products WHERE item_id =" + userItem, function (err, res) {
         
         //this variable is global 
